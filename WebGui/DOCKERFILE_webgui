@@ -1,0 +1,14 @@
+# Use the official Python image as a base image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the script1.py and any other necessary files
+COPY Helloworld.py /app/
+
+# Install any dependencies specific to script1.py
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set the entry point
+CMD ["python", "Helloworld.py"]
