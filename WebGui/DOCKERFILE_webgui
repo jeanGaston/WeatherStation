@@ -5,7 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
 
 # Copy the script1.py and any other necessary files
-COPY Helloworld.py /app/
+COPY ./Helloworld.py /app/
 
 # Install any dependencies specific to script1.py
 RUN pip install --no-cache-dir -r requirements.txt
