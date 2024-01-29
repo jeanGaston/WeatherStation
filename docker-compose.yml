@@ -4,9 +4,9 @@ services:
   DataScraper:
     build:
       context: ./DataScraper
-      dockerfile: Dockerfile_DataScraper
+      dockerfile: ./DataScraper/Dockerfile_DataScraper
 
   WebGui:
     build:
       context: ./WebGui
-      dockerfile: Dockerfile_webgui
+      dockerfile: ./WebGui/Dockerfile_webgui
