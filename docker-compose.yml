@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  DataScraper:
+  data-scraper:
     build:
       context: ./DataScraper
-      dockerfile: ./DataScraper/Dockerfile_DataScraper
+      dockerfile: ./DOCKERFILE
 
-  WebGui:
+  web-gui:
     build:
       context: ./WebGui
-      dockerfile: ./WebGui/Dockerfile_webgui
+      dockerfile: ./DOCKERFILE
