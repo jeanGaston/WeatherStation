@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./Helloworld.py /app/
 
 # Install any dependencies specific to script1.py
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r ./requirements.txt
 
 # Set the entry point
 CMD ["python", "Helloworld.py"]
