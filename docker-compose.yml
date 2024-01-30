@@ -10,7 +10,7 @@ services:
     build:
       context: ./WebGui
       dockerfile: ./DOCKERFILE
-    port:
+    ports:
       - '80:5000'
   
   # database:
