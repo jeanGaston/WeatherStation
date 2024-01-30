@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./main.py /app/
 
 # Install any dependencies
-RUN pip install --no-cache-dir bluepy.btle
+RUN pip install --no-cache-dir bluepy
 
 # Set the entry point
 CMD ["python", "main.py"]
