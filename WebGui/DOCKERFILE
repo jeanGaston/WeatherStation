@@ -11,7 +11,7 @@ COPY ./Helloworld.py /app/
 #EXPOSE 5000
 
 # Install any dependencies
-RUN pip install --no-cache-dir -r ./requirements.py
+RUN pip install --no-cache-dir Flask==2.1.2
 
 # Set the entry point
 CMD ["python", "Helloworld.py"]
