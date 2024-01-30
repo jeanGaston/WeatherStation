@@ -1,14 +1,16 @@
 # Use the official Python image as a base image
-FROM python:3.8-slim
+FROM python:3.11-bullseye
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the script1.py and any other necessary files
-COPY ./Helloworld.py /app/
+COPY ./main.py /app/
 
 # Install any dependencies
-#RUN pip install --no-cache-dir -r ./requirements.txt
+RUN pip3 install --no-cache-dir bluepy
 
 # Set the entry point
-CMD ["python", "Helloworld.py"]
+CMD ["python", "main.py"]
+#Run as root
+USER root
