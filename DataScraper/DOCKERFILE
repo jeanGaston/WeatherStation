@@ -12,4 +12,4 @@ COPY ./main.py /app/
 RUN pip3 install --no-cache-dir bluepy
 
 # Set the entry point
-CMD ["python", "main.py"]
+CMD ["sudo","python", "main.py"]
