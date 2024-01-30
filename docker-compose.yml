@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  data-scraper:
+    build:
+      context: ./DataScraper
+      dockerfile: ./DOCKERFILE
+
+  web-gui:
+    build:
+      context: ./WebGui
+      dockerfile: ./DOCKERFILE
+      
