@@ -11,7 +11,7 @@ COPY ./Helloworld.py /app/
 EXPOSE 5000
 
 # Install any dependencies
-RUN pip install --no-cache-dir -r flask
+RUN pip install --no-cache-dir flask
 
 # Set the entry point
 CMD ["python", "Helloworld.py"]
