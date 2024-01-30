@@ -13,17 +13,14 @@ services:
     ports:
       - '80:5000'
   
-  # database:
-  #   image: 'mariadb:10.3'
-  #   container_name: database
-  #   restart: always
-  #   environment:
-  #     - MYSQL_USER: user
-  #     - MYSQL_PASSWORD: mypassword
-  #     - MYSQL_DATABASE: my_database
-  #     - MYSQL_ROOT_PASSWORD: rootpassword
-    
-  #   ports:
-  #       - '3306:3306'
-  #   volumes:
-  #       - ${PWD}/mariadb/:/var/lib/mysql/
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - "3306:3306"
