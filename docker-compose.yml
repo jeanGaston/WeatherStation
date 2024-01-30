@@ -12,6 +12,7 @@ services:
       dockerfile: ./DOCKERFILE
     ports:
       - '80:5000'
+    privileged: true 
   
   database:
     image: mariadb
