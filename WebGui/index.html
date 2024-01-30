@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Données depuis MariaDB</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function actualiserDonnees() {
+                $.ajax({
+                    url: '/',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#tableau-donnees').html(data);
+                    }
+                });
+            }
+
+            setInterval(actualiserDonnees, 1000); // Rafraîchir toutes les 1 seconde
+        });
+    </script>
+</head>
+<body>
+    <h1>Données depuis MariaDB</h1>
+    <table border="1" id="tableau-donnees">
+        <tr>
+            <th>Colonne 1</th>
+            <th>Colonne 2</th>
+        </tr>
+        {% for row in resultats %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
