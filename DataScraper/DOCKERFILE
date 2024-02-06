@@ -8,6 +8,9 @@ WORKDIR /app
 COPY ./main.py /app/
 
 # Install any dependencies
+RUN apt-get update && apt-get install -y \
+    bluez \
+    dbus
 
 RUN pip3 install --no-cache-dir bluepy
 
