@@ -1,5 +1,5 @@
 # Use the official Python image as a base image
-FROM python:3.11-bullseye
+FROM python:3.11-slim-bullseye
 
 # Set the working directory in the container
 WORKDIR /app
@@ -8,11 +8,11 @@ WORKDIR /app
 COPY ./main.py /app/
 
 # Install any dependencies
-RUN apt-get update && apt-get install -y \
-    bluez \
-    dbus
+RUN apt install bluez bluetoothctl bluetooth libbluetooth-dev dbus
+
 
 RUN pip3 install --no-cache-dir bluepy
 
 # Set the entry point
-CMD ["python", "main.py"]
+COPY entrypoint.sh .
+CMD ./entrypoint.sh
