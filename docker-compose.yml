@@ -7,7 +7,7 @@ services:
       dockerfile: ./DOCKERFILE
     privileged: true 
     volumes:
-      -volumes: /run/dbus:/run/dbus:ro
+      - /run/dbus:/run/dbus:ro
 
   web-gui:
     build:
