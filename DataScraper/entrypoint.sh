@@ -2,4 +2,4 @@
 
 service dbus start
 service bluetooth start
-sudo python3 ./main.py
+python3 ./main.py
