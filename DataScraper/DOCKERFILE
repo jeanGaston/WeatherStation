@@ -17,4 +17,5 @@ RUN pip3 install --no-cache-dir bleak
 
 # Set the entry point
 COPY entrypoint.sh .
+RUN ["chmod", "+x", "./entrypoint.sh"]
 CMD ./entrypoint.sh
