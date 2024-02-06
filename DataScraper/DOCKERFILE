@@ -1,5 +1,4 @@
-FROM resin/rpi-raspbian:lastest
-
+FROM resin/rpi-raspbian:latest
 
 # Set the working directory in the container
 WORKDIR /app
