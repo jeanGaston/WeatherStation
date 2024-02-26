@@ -5,7 +5,11 @@ services:
     build:
       context: ./DataScraper
       dockerfile: ./DOCKERFILE
-    privileged: true 
+    privileged: true
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/Paris
     volumes:
       - /run/dbus:/run/dbus
 
