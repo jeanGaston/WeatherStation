@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     bluetooth
     
 
-RUN pip3 install --no-cache-dir bluepy
+RUN pip3 install --no-cache-dir bleak
 
 # Set the entry point
 COPY entrypoint.sh .
