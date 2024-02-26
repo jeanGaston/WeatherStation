@@ -5,15 +5,19 @@ services:
     build:
       context: ./DataScraper
       dockerfile: ./DOCKERFILE
+    privileged: true 
+    volumes:
+      - /run/dbus:/run/dbus:ro
 
   web-gui:
     build:
       context: ./WebGui
       dockerfile: ./DOCKERFILE
     ports:
-      - '80:5000'
+      - '8080:5000'
+    
   
-  db:
+  database:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -24,3 +28,6 @@ services:
       - data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+volumes:
+  data:
