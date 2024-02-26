@@ -1,5 +1,5 @@
 #!/bin/bash
 
-service dbus start
-service bluetooth start
+service dbus restart
+service bluetooth restart
 python3 ./main.py
