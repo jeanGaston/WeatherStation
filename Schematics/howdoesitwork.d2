@@ -1,0 +1,82 @@
+hst : "host" {
+    Dck : "Stack Docker Compose" {
+        DB :"MariaDB" {
+            icon : https://icons.terrastruct.com/azure%2FDatabases%20Service%20Color%2FAzure%20Database%20for%20MariaDB%20servers.svg
+        }
+        Scrp : "DataScrapper" {
+            icon : https://icons.terrastruct.com/dev%2Fpython.svg
+            explaination : |md 
+                Containerized python  
+                used to scrap data from bluetooth
+            |
+
+        }
+        web : "WebGui" {
+            icon : https://icons.terrastruct.com/dev%2Fpython.svg
+            explaination : |md
+            Containerized python  
+            used to display data from DB
+            |
+        }
+    }
+    blt : "Bluetooth hardware" {
+        icon : https://icons.terrastruct.com/essentials%2F317-bluetooth.svg
+    }
+}
+sens : "Weather Sensor" {}
+PC : "User browser"{
+    icon : https://icons.terrastruct.com/essentials%2F365-user.svg
+
+}
+hst.Dck.DB <-- hst.Dck.Scrp : "Write \ndata" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : green
+    }
+}
+
+hst.Dck.DB --> hst.Dck.web : "Read \nData" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : green
+    }
+}
+
+sens --> hst.blt --> hst.Dck.scrp : "Read \nData" {
+    style : {
+        stroke-dash: 5
+        animated: true
+    }
+}
+hst.Dck.web --> pc : "display \ndata" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : green
+    }
+}
+hst.Dck.web <-- pc : "write \nsettings" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : orange
+    }
+}
+
+hst.Dck.DB <-- hst.Dck.web : "write \nsettings" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : orange
+    }
+}
+
+hst.Dck.DB --> hst.Dck.Scrp : "Read \nsettings" {
+    style : {
+        stroke-dash: 5
+        animated: true
+        stroke : orange 
+    }
+}
