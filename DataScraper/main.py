@@ -4,6 +4,6 @@ from bleak import BleakScanner
 async def main():
     devices = await BleakScanner.discover()
     for d in devices:
-        print(d)
+        print(d) # afficher d
 
-asyncio.run(main())
+asyncio.run(main()),
