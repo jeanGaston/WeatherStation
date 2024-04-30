@@ -9,7 +9,7 @@ def create_database(db_name):
     # Create SensorData table
     c.execute('''CREATE TABLE IF NOT EXISTS SensorData
                  (Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  Sensor TEXT,
+                  FOREIGN KEY (Sensor) REFERENCES Sensors(Name),
                   Timestamp TEXT,
                   Temp INT,
                   HR INTEGER,
@@ -17,9 +17,8 @@ def create_database(db_name):
 
     # Create Sensors table
     c.execute('''CREATE TABLE IF NOT EXISTS Sensors
-                 (Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  Mac TEXT,
-                  Name TEXT)''')
+                 (Mac TEXT RIMARY KEY,
+                  Name TEXT )''')
 
     conn.commit()
     conn.close()
