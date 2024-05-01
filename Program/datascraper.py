@@ -25,7 +25,7 @@ def BltDataScrap():
                     add_sensor_data(DBFILE, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S"), temp, HR, Bat)
                     if temp > MAX_TEMP :
                         
-                        email(RECIPIENT, MESSAGE_Temp, temp, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S") )
+                        email(RECIPIENT, MESSAGE_TEMP, temp, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S") )
                         print("mail sent for temp max")
                     elif temp > MAX_HR :
                         email(RECIPIENT, MESSAGE_HR, HR, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S") )
