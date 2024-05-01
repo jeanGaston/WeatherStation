@@ -1,3 +1,4 @@
+from mail import *
 import schedule
 import threading
 import time
@@ -23,13 +24,13 @@ def BltDataScrap():
                     Bat = int(value[20:22], 16)
                     #print(f"Temp : {temp} °c \n HR : {HR} % , \n Batterie : {Bat} %")
                     add_sensor_data(DBFILE, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S"), temp, HR, Bat)
-                    if temp > MAX_TEMP :
+                    """if temp > MAX_TEMP :
                         
                         email(RECIPIENT, MESSAGE_TEMP, temp, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S") )
                         print("mail sent for temp max")
                     elif temp > MAX_HR :
                         email(RECIPIENT, MESSAGE_HR, HR, sensor_dict[device.addr], time.strftime("%Y-%m-%d %H:%M:%S") )
-                        print("mail sent for HR max")
+                        print("mail sent for HR max") """
 
                     
     return 0
