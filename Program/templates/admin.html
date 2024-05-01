@@ -48,23 +48,42 @@
     }
     .btn:hover {
         background-color: #0056b3;
-    }</style>
+    }
+    form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
     <div class="btn-container">
         <a href="/history" class="btn">View History</a>
-        <a href="/adm" class="btn">Admin</a>
+        <a href="/" class="btn">Dashboard</a>
     </div>
     <div class="container">
-        <h1>Sensor Data Dashboard</h1>
+        <h1>Sensors</h1>
         <table>
             <tr>
-                <th>Id</th>
-                <th>Sensor</th>
-                <th>Timestamp</th>
-                <th>Temp</th>
-                <th>HR</th>
-                <th>Bat</th>
+                <th>mac</th>
+                <th>Name</th>
             </tr>
             {% for row in data %}
             <tr>
@@ -77,13 +96,21 @@
             </tr>
             {% endfor %}
         </table>
-        <h1>Current Weather</h1>
-    {% if temperature %}
-    <p>The current temperature is {{ temperature }}°C</p>
-    {% else %}
-    <p>Unable to fetch weather data.</p>
-    {% endif %}
     </div>
+    <h1>Rename Sensor</h1>
+    <form method="post">
+        <label for="old_name">Select sensor to rename:</label>
+        <select name="old_name" id="old_name">
+            {% for sensor in sensors %}
+                <option value="{{ sensor[0] }}">{{ sensor[1] }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="new_name">Enter new name:</label>
+        <input type="text" name="new_name" id="new_name" required>
+        <br><br>
+        <button type="submit">Rename Sensor</button>
+    </form>
     <script>
         // Refresh the page every 10 seconds
         setTimeout(function(){

@@ -1,3 +1,5 @@
+import smtplib
+import ssl
 from database import *
 from datascraper import *
 from Webserver import RunInThread_WebServer
