@@ -1,3 +1,4 @@
+from datetime import datetime
 from mail import *
 import schedule
 import threading
@@ -35,7 +36,8 @@ def BltDataScrap():
                     
     return 0
 def RunInThread_DataScrap():
-    print("######################################################################\nOpen Thread datascrap")
+    now = datetime.now()
+    print(f"######################################################################\n[{now}] Open Thread datascrap")
     threading.Thread(target=BltDataScrap, daemon=True).start()
 
 def ScheduleDataScrap():

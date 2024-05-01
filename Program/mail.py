@@ -1,7 +1,9 @@
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import sqlite3
 import threading
+
 
 import schedule
 from env import *
@@ -88,7 +90,8 @@ def check_and_send_email():
     conn.close()
 
 def RunInThread_MailAlerts():
-    print("######################################################################\nOpen Thread mail check Alert")
+    now = datetime.now()
+    print(f"######################################################################\n[{now}] Open Thread mail check Alert")
     threading.Thread(target=check_and_send_email, daemon=True).start()
 
 def ScheduleMailAlerts():

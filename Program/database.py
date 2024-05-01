@@ -1,5 +1,7 @@
+from datetime import datetime
 import sqlite3
 from os import path
+import time
 
 from env import SENSORS, DBFILE
 
@@ -34,11 +36,12 @@ def create_database(db_name):
 # Check if the database file exists
 def check_database(db_name):
     if not path.exists(db_name):
-        print(f"Database '{db_name}' not found. Creating...")
+        
+        print(f"[{datetime.now()}] Database '{db_name}' not found. Creating...")
         create_database(db_name)
-        print("Database and tables created successfully.")
+        print(f"[{datetime.now()}] Database and tables created successfully.")
     else:
-        print(f"Database '{db_name}' found.")
+        print(f"[{datetime.now()}] Database '{db_name}' found.")
 
 
 # Function to add data to SensorData table
