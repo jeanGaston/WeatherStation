@@ -1,6 +1,10 @@
 from datetime import datetime
 import sqlite3
 from os import path
+import plotly.graph_objs as go
+import pandas as pd
+
+
 import time
 
 from env import *
@@ -141,3 +145,21 @@ def print_email_settings():
     # Close the connection
     conn.close()
 
+def history_graph(sensor):
+    # Fetch sensor data
+    data = fetch_data_by_sensor(sensor)
+    df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
+    # Create traces for temperature and HR
+    trace_temp = go.Scatter(x=df['Timestamp'], y=df['Temp'], mode='lines', name='Temperature')
+    trace_hr = go.Scatter(x=df['Timestamp'], y=df['HR'], mode='lines', name='Humidity Rate')
+
+    # Create layout
+    layout = go.Layout(title='Last Hour of History',
+                       xaxis=dict(title='Time'),
+                       yaxis=dict(title='Value'))
+
+    # Create figure
+    fig = go.Figure(data=[trace_temp, trace_hr], layout=layout)
+
+    # Convert figure to JSON for rendering in template
+    graph_json = fig.to_json()

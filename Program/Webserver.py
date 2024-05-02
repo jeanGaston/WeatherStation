@@ -47,8 +47,11 @@ def fetch_outdoor_temperature():
 @app.route('/')
 def dashboard():
     data = fetch_all_data()[:5]
-    
-    return render_template('index.html', data=data, temperature=None)
+
+    # Convert figure to JSON for rendering in template
+    graph_json = history_graph('Home')
+
+    return render_template('index.html', data=data, temperature=None,  graph_json=graph_json)
 
 #Route to display the sensor history
 @app.route('/history')
@@ -63,6 +66,7 @@ def history():
     """ S1 = fetch_data_by_sensor("DEMO1")
     S2 = fetch_data_by_sensor("DEMO2")
     S3 = fetch_data_by_sensor("DEMO3") """
+
     
     return render_template('history.html', S1=disp_data[0], S2=disp_data[1], S3=disp_data[2])
 

@@ -16,6 +16,21 @@ db_file=${db_file:-data.db}
 
 echo -e "DB_FILE = '$db_file'" > Program/env.py
 
+# Create env.py file
+echo -n "Enter database file name (default: data.db): "
+read db_file
+db_file=${db_file:-data.db}
+
+
+echo -e "DB_FILE = '$db_file'" > Program/env.py
+
+# Create env.py file
+echo -n "Enter database file name (default: data.db): "
+read db_file
+db_file=${db_file:-data.db}
+
+
+echo -e "DB_FILE = '$db_file'" > Program/env.py
 # Execute main.py
 cd Program
 python3 main.py

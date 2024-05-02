@@ -85,6 +85,15 @@
     <p>Unable to fetch weather data.</p>
     {% endif %}
     </div>
+    <h1>Last Hour of History</h1>
+    <div id="graph"></div>
+    <script>
+        // Parse JSON data
+        var graphData = {{ graph_json | safe }};
+        
+        // Render graph
+        Plotly.newPlot('graph', graphData.data, graphData.layout);
+    </script>
     <script>
         // Refresh the page every 10 seconds
         setTimeout(function(){

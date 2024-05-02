@@ -32,10 +32,6 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
         - The sensor on wich the values are maxed out
         - the time stamp
     """
-    """     port = SMTP_PORT # For SSL
-    smtp_server = SMTP
-    sender_email = SMTP_ID  # Enter your address
-    password = SMTP_PWD """
     print(fetch_email_settings())
     sender_email, password, smtp_server, port, recipient_email = fetch_email_settings()
 
@@ -59,12 +55,14 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
 
         # Send the email
         server.sendmail(sender_email, recipient_email, msg.as_string())
-        print("Email sent successfully!")
-    except Exception as e:
-        print(f"Failed to send email. Error: {e}")
-    finally:
+        print(f" [{datetime.now()}] Email sent successfully!")
         # Close the connection
         server.quit()
+    except Exception as e:
+        print(f"[{datetime.now()}] Failed to send email. Error: {e}")
+    finally:
+        None
+
 
 def check_and_send_email():
     # Connect to the database
