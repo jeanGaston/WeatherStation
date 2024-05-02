@@ -25,6 +25,11 @@ def create_database(db_name):
                 Bat INT,
                 FOREIGN KEY (Sensor) REFERENCES Sensors(Name))''')
     
+    c.execute('''CREATE TABLE IF NOT EXISTS Settings
+                (Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Name TEXT,
+                Value TEXT''')
+
     for mac, name in SENSORS.items():
         # Use INSERT OR IGNORE to prevent duplicates based on primary key
         c.execute("INSERT OR IGNORE INTO Sensors (Mac, Name) VALUES (?, ?)", (mac, name))
