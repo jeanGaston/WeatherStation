@@ -49,9 +49,9 @@ def dashboard():
     data = fetch_all_data()[:5]
 
     # Convert figure to JSON for rendering in template
-    graph_json = history_graph('Home')
-
-    return render_template('index.html', data=data, temperature=None,  graph_json=graph_json)
+    temp_graph_json = history_graph_temp()
+    HR_graph_json = history_graph_HR()
+    return render_template('index.html', data=data, temperature=None,  temp_graph_json=temp_graph_json, HR_graph_json=HR_graph_json)
 
 #Route to display the sensor history
 @app.route('/history')

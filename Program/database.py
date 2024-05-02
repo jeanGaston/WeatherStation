@@ -27,7 +27,7 @@ def create_database(db_name):
                 Sensor TEXT,
                 Timestamp TEXT,
                 Temp INT,
-                HR INTEGER,
+                HR INT,
                 Bat INT,
                 FOREIGN KEY (Sensor) REFERENCES Sensors(Name))''')
     
@@ -145,21 +145,62 @@ def print_email_settings():
     # Close the connection
     conn.close()
 
-def history_graph(sensor):
+def history_graph_temp():
     # Fetch sensor data
-    data = fetch_data_by_sensor(sensor)
-    df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
-    # Create traces for temperature and HR
-    trace_temp = go.Scatter(x=df['Timestamp'], y=df['Temp'], mode='lines', name='Temperature')
-    trace_hr = go.Scatter(x=df['Timestamp'], y=df['HR'], mode='lines', name='Humidity Rate')
+    sensorList = fetch_all_sensor()
+    Trace = ['','' ,'' ]
+    i =0
+    for mac, name in sensorList:
 
+        data = fetch_data_by_sensor(name)
+        #print(data)
+        df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
+        # Create traces for temperature
+        Trace[i] = go.Scatter(x=df['Timestamp'], y=df['Temp'], mode='lines', name=name)
+        #print(Trace[i])
+        i+=1
+        #print(trace_temp)
     # Create layout
-    layout = go.Layout(title='Last Hour of History',
+    layout = go.Layout(title='Graph Temp history',
                        xaxis=dict(title='Time'),
-                       yaxis=dict(title='Value'))
+                       yaxis=dict(title='Temperature in °C'))
 
     # Create figure
-    fig = go.Figure(data=[trace_temp, trace_hr], layout=layout)
+    fig = go.Figure(data=[Trace[0], Trace[1], Trace[2] ], layout=layout )
 
     # Convert figure to JSON for rendering in template
     graph_json = fig.to_json()
+    #print(graph_json)
+    return graph_json
+
+
+def history_graph_HR():
+    # Fetch sensor data
+    sensorList = fetch_all_sensor()
+    Trace = ['','','']
+    i = 0
+    
+  
+    for mac, name in sensorList:
+        
+        data = fetch_data_by_sensor(name)
+        df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
+        # Create traces for temperature
+        Trace[i] = go.Scatter(x=df['Timestamp'], y=df['HR'], mode='lines', name=name)
+        #print(Trace[i])
+        i+=1
+
+        
+        #print(trace_temp)
+    # Create layout
+    layout = go.Layout(title='Graph HR history',
+                       xaxis=dict(title='Time'),
+                       yaxis=dict(title='Humidity Rate in % '))
+
+    # Create figure
+    fig = go.Figure(data=[Trace[0], Trace[1], Trace[2] ], layout=layout )
+
+    # Convert figure to JSON for rendering in template
+    graph_json = fig.to_json()
+    #print(graph_json)
+    return graph_json

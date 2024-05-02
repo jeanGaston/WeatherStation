@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>Sensor Data Dashboard</title>
     <!-- <link rel="stylesheet" href="/css"> -->
     <style>body {
@@ -85,14 +86,16 @@
     <p>Unable to fetch weather data.</p>
     {% endif %}
     </div>
-    <h1>Last Hour of History</h1>
-    <div id="graph"></div>
+    <h1>History in graphs</h1>
+    <div id="graph_temp"></div>
+    <div id="graph_hr"></div>
     <script>
         // Parse JSON data
-        var graphData = {{ graph_json | safe }};
-        
+        var temp_graphData = {{ temp_graph_json | safe }};
+        var HR_graphData = {{ HR_graph_json | safe }};
         // Render graph
-        Plotly.newPlot('graph', graphData.data, graphData.layout);
+        Plotly.newPlot('graph_temp', temp_graphData.data, temp_graphData.layout);
+        Plotly.newPlot('graph_hr', HR_graphData.data, HR_graphData.layout);
     </script>
     <script>
         // Refresh the page every 10 seconds
