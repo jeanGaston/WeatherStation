@@ -4,7 +4,7 @@ import threading
 
 import requests
 from env import *
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 import sqlite3
 from database import *
 app = Flask(__name__)
@@ -38,15 +38,17 @@ def fetch_outdoor_temperature():
 
 
 # Appel de la fonction pour obtenir la température
-temperature = fetch_outdoor_temperature()
-print(temperature)
+#temperature = fetch_outdoor_temperature()
+#print(temperature)
+
+
 
 # Route to display the database contents
 @app.route('/')
 def dashboard():
     data = fetch_all_data()[:5]
     
-    return render_template('index.html', data=data, temperature=temperature)
+    return render_template('index.html', data=data, temperature=None)
 
 #Route to display the sensor history
 @app.route('/history')
@@ -64,26 +66,40 @@ def history():
     
     return render_template('history.html', S1=disp_data[0], S2=disp_data[1], S3=disp_data[2])
 
-@app.route('/adm', methods=['GET', 'POST'])
+@app.route('/adm', methods=['GET'])
 def admin():
-    if request.method == 'POST':
-        # Get form data
-        old_name = request.form['old_name']
-        new_name = request.form['new_name']
+            
 
-        # Update sensor name in the database
-        conn = sqlite3.connect(DBFILE)
-        c = conn.cursor()
-        print(old_name, new_name)
-        c.execute("UPDATE Sensors SET Name = ? WHERE mac = ?", (new_name, old_name))
-        print()
-        conn.commit()
-        conn.close()
-
-
+    # Fetch sensor data
     data = fetch_all_sensor()
-    print(data)
-    return render_template('admin.html', data=data, sensors=data)
+
+    # Fetch email settings
+    email_settings = fetch_email_settings()
+    return render_template('admin.html', data=data, sensors=data, email_settings=email_settings)
+
+@app.route('/updateMail', methods=['POST'])
+def update_mail():
+    # Process the form data here
+    smtp_id = request.form['smtp_id']
+    smtp_pwd = request.form['smtp_pwd']
+    smtp_server = request.form['smtp_server']
+    smtp_port = request.form['smtp_port']
+    recipient_email = request.form['recipient_email']
+    
+    # Update email settings in the database or perform any other actions
+    update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email)
+    # Redirect to a success page or render a template
+    return redirect("/adm")
+
+@app.route('/updateSensor', methods=['POST'])
+def updateSensor():
+    # Get sensor name form data
+    old_name = request.form['old_name']
+    new_name = request.form['new_name']
+
+    update_sensor_settings(new_name, old_name)
+
+    return redirect("/adm")
 
 def run_flask():
     app.run()

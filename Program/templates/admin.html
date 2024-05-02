@@ -75,8 +75,9 @@
 </head>
 <body>
     <div class="btn-container">
-        <a href="/history" class="btn">View History</a>
         <a href="/" class="btn">Dashboard</a>
+        <a href="/history" class="btn">View History</a>
+        <a href="/adm" class="btn">Admin</a>
     </div>
     <div class="container">
         <h1>Sensors</h1>
@@ -98,7 +99,7 @@
         </table>
     </div>
     <h1>Rename Sensor</h1>
-    <form method="post">
+    <form action="/updateSensor" method="post">
         <label for="old_name">Select sensor to rename:</label>
         <select name="old_name" id="old_name">
             {% for sensor in sensors %}
@@ -111,11 +112,24 @@
         <br><br>
         <button type="submit">Rename Sensor</button>
     </form>
-    <script>
-        // Refresh the page every 10 seconds
-        setTimeout(function(){
-            location.reload();
-        }, 20000);
-    </script>
+    <h1>Email Settings</h1>
+    <form method="post" action="/updateMail"> 
+        <label for="smtp_id">Sender Email:</label>
+        <input type="email" id="smtp_id" name="smtp_id" value="{{ email_settings[0] }}">
+        <br><br>
+        <label for="smtp_pwd">Sender Password:</label>
+        <input type="password" id="smtp_pwd" name="smtp_pwd" value="{{ email_settings[1] }}">
+        <br><br>
+        <label for="smtp_server">SMTP Server:</label>
+        <input type="text" id="smtp_server" name="smtp_server" value="{{ email_settings[2] }}">
+        <br><br>
+        <label for="smtp_port">SMTP Port:</label>
+        <input type="number" id="smtp_port" name="smtp_port" value="{{ email_settings[3] }}">
+        <br><br>
+        <label for="recipient_email">Recipient Email:</label>
+        <input type="email" id="recipient_email" name="recipient_email" value="{{ email_settings[4] }}">
+        <br><br>
+        <button type="submit">Save Settings</button>
+    </form>
 </body>
 </html>

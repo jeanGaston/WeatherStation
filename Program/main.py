@@ -9,6 +9,7 @@ check_database(DBFILE)
 RunInThread_WebServer()
 ScheduleDataScrap()
 ScheduleMailAlerts()
+#print_email_settings()
 
 
 while True:

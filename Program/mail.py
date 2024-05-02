@@ -3,10 +3,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import sqlite3
 import threading
-
-
 import schedule
 from env import *
+from database import fetch_email_settings
 
 MESSAGE_TEMP = """
 
@@ -33,11 +32,14 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
         - The sensor on wich the values are maxed out
         - the time stamp
     """
-    port = SMTP_PORT # For SSL
+    """     port = SMTP_PORT # For SSL
     smtp_server = SMTP
     sender_email = SMTP_ID  # Enter your address
-    password = SMTP_PWD
-       # Create a MIME message
+    password = SMTP_PWD """
+    print(fetch_email_settings())
+    sender_email, password, smtp_server, port, recipient_email = fetch_email_settings()
+
+    # Create a MIME message
     msg = MIMEMultipart()
     msg['From'] = sender_email
     msg['To'] = recipient_email
@@ -49,7 +51,7 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
 
     try:
         # Start a TLS encrypted connection
-        server = smtplib.SMTP(smtp_server, port)
+        server = smtplib.SMTP(smtp_server, int(port))
         server.starttls()
 
         # Login to the SMTP server

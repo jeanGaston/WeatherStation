@@ -3,7 +3,7 @@ import sqlite3
 from os import path
 import time
 
-from env import SENSORS, DBFILE
+from env import *
 
 # Function to create the database and tables if they don't exist
 def create_database(db_name):
@@ -14,7 +14,9 @@ def create_database(db_name):
     c.execute('''CREATE TABLE IF NOT EXISTS Sensors
                 (Mac TEXT PRIMARY KEY,
                 Name TEXT)''')
-
+    for mac, name in SENSORS.items():
+        # Use INSERT OR IGNORE to prevent duplicates based on primary key
+        c.execute("INSERT OR IGNORE INTO Sensors (Mac, Name) VALUES (?, ?)", (mac, name))
     # Create SensorData table
     c.execute('''CREATE TABLE IF NOT EXISTS SensorData
                 (Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,14 +27,15 @@ def create_database(db_name):
                 Bat INT,
                 FOREIGN KEY (Sensor) REFERENCES Sensors(Name))''')
     
-    c.execute('''CREATE TABLE IF NOT EXISTS Settings
-                (Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT,
-                Value TEXT''')
+    c.execute('''CREATE TABLE IF NOT EXISTS settings (
+                id INTEGER PRIMARY KEY,
+                smtp_id TEXT,
+                smtp_pwd TEXT,
+                smtp_server TEXT,
+                smtp_port INTEGER,
+                recipient_email TEXT);''')
+    c.execute("INSERT OR IGNORE INTO settings (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email) VALUES (?, ?, ?, ?, ?)", (SMTP_ID, SMTP_PWD, SMTP, SMTP_PORT, RECIPIENT))
 
-    for mac, name in SENSORS.items():
-        # Use INSERT OR IGNORE to prevent duplicates based on primary key
-        c.execute("INSERT OR IGNORE INTO Sensors (Mac, Name) VALUES (?, ?)", (mac, name))
 
 
     conn.commit()
@@ -87,3 +90,54 @@ def fetch_all_sensor():
     conn.close()
     data.reverse()
     return data
+
+def update_sensor_settings(new_name, old_name):
+    # Update sensor name in the database
+            conn = sqlite3.connect(DBFILE)
+            c = conn.cursor()
+            c.execute("UPDATE Sensors SET Name = ? WHERE mac = ?", (new_name, old_name))
+            conn.commit()
+            conn.close()
+
+# Function to fetch email settings from the database
+def fetch_email_settings():
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+    c.execute("SELECT smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email FROM settings")
+    settings = c.fetchone()
+    conn.close()
+    return settings
+
+# Function to update email settings in the database
+def update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email):
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+    c.execute("UPDATE settings SET smtp_id = ?, smtp_pwd = ?, smtp_server = ?, smtp_port = ?, recipient_email = ? ", (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email))
+    conn.commit()
+    print(f"[{datetime.now()}] Mail settings updated :")
+    print_email_settings()
+    conn.close()
+
+def print_email_settings():
+    # Connect to the database
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+
+    # Fetch email settings
+    c.execute("SELECT * FROM settings")
+    settings = c.fetchone()
+
+    # Print settings
+    if settings:
+        print("Email Settings:")
+        print(f"Sender Email: {settings[1]}")
+        print(f"SMTP pwd:{settings[2]}")
+        print(f"SMTP Server: {settings[3]}")
+        print(f"SMTP Port: {settings[4]}")
+        print(f"Recipient Email: {settings[5]}")
+    else:
+        print("No email settings found in the database.")
+
+    # Close the connection
+    conn.close()
+
