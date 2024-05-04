@@ -49,9 +49,9 @@ def dashboard():
     data = fetch_all_data()[:5]
 
     # Convert figure to JSON for rendering in template
-    graph_json = history_graph('Home')
-
-    return render_template('index.html', data=data, temperature=None,  graph_json=graph_json)
+    temp_graph_json = history_graph_temp()
+    HR_graph_json = history_graph_HR()
+    return render_template('index.html', data=data, temperature=None,  temp_graph_json=temp_graph_json, HR_graph_json=HR_graph_json)
 
 #Route to display the sensor history
 @app.route('/history')
@@ -79,7 +79,10 @@ def admin():
 
     # Fetch email settings
     email_settings = fetch_email_settings()
-    return render_template('admin.html', data=data, sensors=data, email_settings=email_settings)
+
+    #Fetch threshold settings
+    threshold_settings = fetch_threshold_settings()
+    return render_template('admin.html', data=data, sensors=data, email_settings=email_settings, threshold_settings=threshold_settings)
 
 @app.route('/updateMail', methods=['POST'])
 def update_mail():
@@ -89,9 +92,14 @@ def update_mail():
     smtp_server = request.form['smtp_server']
     smtp_port = request.form['smtp_port']
     recipient_email = request.form['recipient_email']
+    max_hr = request.form['MAX_HR']
+    max_temp = request.form['MAX_TEMP']
     
-    # Update email settings in the database or perform any other actions
+    # Update email settings in the database
     update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email)
+    # Update threshold settings in the database
+    update_threshold_settings(max_hr, max_temp)
+
     # Redirect to a success page or render a template
     return redirect("/adm")
 

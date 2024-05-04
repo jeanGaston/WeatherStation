@@ -5,7 +5,6 @@ import plotly.graph_objs as go
 import pandas as pd
 
 
-import time
 
 from env import *
 
@@ -27,18 +26,20 @@ def create_database(db_name):
                 Sensor TEXT,
                 Timestamp TEXT,
                 Temp INT,
-                HR INTEGER,
+                HR INT,
                 Bat INT,
                 FOREIGN KEY (Sensor) REFERENCES Sensors(Name))''')
     
-    c.execute('''CREATE TABLE IF NOT EXISTS settings (
+    c.execute('''CREATE TABLE IF NOT EXISTS alert_settings (
                 id INTEGER PRIMARY KEY,
                 smtp_id TEXT,
                 smtp_pwd TEXT,
                 smtp_server TEXT,
                 smtp_port INTEGER,
-                recipient_email TEXT);''')
-    c.execute("INSERT OR IGNORE INTO settings (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email) VALUES (?, ?, ?, ?, ?)", (SMTP_ID, SMTP_PWD, SMTP, SMTP_PORT, RECIPIENT))
+                recipient_email TEXT,
+                MAX_HR INT,
+                MAX_TEMP INT);''')
+    c.execute("INSERT OR IGNORE INTO alert_settings (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email, MAX_HR, MAX_TEMP) VALUES (?, ?, ?, ?, ?, ?, ?)", (SMTP_ID, SMTP_PWD, SMTP, SMTP_PORT, RECIPIENT, MAX_HR, MAX_TEMP))
 
 
 
@@ -49,11 +50,11 @@ def create_database(db_name):
 def check_database(db_name):
     if not path.exists(db_name):
         
-        print(f"[{datetime.now()}] Database '{db_name}' not found. Creating...")
+        print(f"[{datetime.now()}] DB - Database '{db_name}' not found. Creating...")
         create_database(db_name)
-        print(f"[{datetime.now()}] Database and tables created successfully.")
+        print(f"[{datetime.now()}] DB - Database and tables created successfully.")
     else:
-        print(f"[{datetime.now()}] Database '{db_name}' found.")
+        print(f"[{datetime.now()}] DB - Database '{db_name}' found.")
 
 
 # Function to add data to SensorData table
@@ -107,7 +108,15 @@ def update_sensor_settings(new_name, old_name):
 def fetch_email_settings():
     conn = sqlite3.connect(DBFILE)
     c = conn.cursor()
-    c.execute("SELECT smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email FROM settings")
+    c.execute("SELECT smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email FROM alert_settings")
+    settings = c.fetchone()
+    conn.close()
+    return settings
+# Function to fetch MAX HR and  MAX temp  from the database
+def fetch_threshold_settings():
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+    c.execute("SELECT MAX_HR, MAX_TEMP FROM alert_settings")
     settings = c.fetchone()
     conn.close()
     return settings
@@ -116,10 +125,20 @@ def fetch_email_settings():
 def update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email):
     conn = sqlite3.connect(DBFILE)
     c = conn.cursor()
-    c.execute("UPDATE settings SET smtp_id = ?, smtp_pwd = ?, smtp_server = ?, smtp_port = ?, recipient_email = ? ", (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email))
+    c.execute("UPDATE alert_settings SET smtp_id = ?, smtp_pwd = ?, smtp_server = ?, smtp_port = ?, recipient_email = ? ", (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email))
     conn.commit()
-    print(f"[{datetime.now()}] Mail settings updated :")
+    print(f"[{datetime.now()}] Web -  Mail settings updated :")
     print_email_settings()
+    conn.close()
+
+# Function to update threshold settings in the database
+def update_threshold_settings(max_hr, max_temp):
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+    c.execute("UPDATE alert_settings SET MAX_HR = ?, MAX_TEMP = ? ", (max_hr, max_temp))
+    conn.commit()
+    print(f"[{datetime.now()}] Web -  threshold settings updated :")
+    print_threshold_settings()
     conn.close()
 
 def print_email_settings():
@@ -128,7 +147,7 @@ def print_email_settings():
     c = conn.cursor()
 
     # Fetch email settings
-    c.execute("SELECT * FROM settings")
+    c.execute("SELECT * FROM alert_settings")
     settings = c.fetchone()
 
     # Print settings
@@ -145,21 +164,80 @@ def print_email_settings():
     # Close the connection
     conn.close()
 
-def history_graph(sensor):
-    # Fetch sensor data
-    data = fetch_data_by_sensor(sensor)
-    df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
-    # Create traces for temperature and HR
-    trace_temp = go.Scatter(x=df['Timestamp'], y=df['Temp'], mode='lines', name='Temperature')
-    trace_hr = go.Scatter(x=df['Timestamp'], y=df['HR'], mode='lines', name='Humidity Rate')
+def print_threshold_settings():
+    # Connect to the database
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
 
+    # Fetch threshold settings
+    c.execute("SELECT MAX_HR, MAX_TEMP FROM alert_settings")
+    settings = c.fetchone()
+
+    # Print settings
+    if settings:
+        print("threshold Settings:")
+        print(f"MAX_HR: {settings[0]}")
+        print(f"MAX_TEMP:{settings[1]}")
+    else:
+        print("No threshold settings found in the database.")
+
+    # Close the connection
+    conn.close
+
+def history_graph_temp():
+    # Fetch sensor data
+    sensorList = fetch_all_sensor()
+    Trace = ['','' ,'' ]
+    i =0
+    for mac, name in sensorList:
+
+        data = fetch_data_by_sensor(name)
+        #print(data)
+        df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
+        # Create traces for temperature
+        Trace[i] = go.Scatter(x=df['Timestamp'], y=df['Temp'], mode='lines', name=name)
+        #print(Trace[i])
+        i+=1
+        #print(trace_temp)
     # Create layout
-    layout = go.Layout(title='Last Hour of History',
+    layout = go.Layout(title='Graph Temp history',
                        xaxis=dict(title='Time'),
-                       yaxis=dict(title='Value'))
+                       yaxis=dict(title='Temperature in °C'))
 
     # Create figure
-    fig = go.Figure(data=[trace_temp, trace_hr], layout=layout)
+    fig = go.Figure(data=[Trace[0], Trace[1], Trace[2] ], layout=layout )
 
     # Convert figure to JSON for rendering in template
     graph_json = fig.to_json()
+    #print(graph_json)
+    return graph_json
+def history_graph_HR():
+    # Fetch sensor data
+    sensorList = fetch_all_sensor()
+    Trace = ['','','']
+    i = 0
+    
+  
+    for mac, name in sensorList:
+        
+        data = fetch_data_by_sensor(name)
+        df = pd.DataFrame(data, columns=['ID', 'Sensor', 'Timestamp', 'Temp', 'HR', 'Bat'])
+        # Create traces for temperature
+        Trace[i] = go.Scatter(x=df['Timestamp'], y=df['HR'], mode='lines', name=name)
+        #print(Trace[i])
+        i+=1
+
+        
+        #print(trace_temp)
+    # Create layout
+    layout = go.Layout(title='Graph HR history',
+                       xaxis=dict(title='Time'),
+                       yaxis=dict(title='Humidity Rate in % '))
+
+    # Create figure
+    fig = go.Figure(data=[Trace[0], Trace[1], Trace[2] ], layout=layout )
+
+    # Convert figure to JSON for rendering in template
+    graph_json = fig.to_json()
+    #print(graph_json)
+    return graph_json

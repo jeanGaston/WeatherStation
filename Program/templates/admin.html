@@ -112,7 +112,7 @@
         <br><br>
         <button type="submit">Rename Sensor</button>
     </form>
-    <h1>Email Settings</h1>
+    <h1>Alert Settings</h1>
     <form method="post" action="/updateMail"> 
         <label for="smtp_id">Sender Email:</label>
         <input type="email" id="smtp_id" name="smtp_id" value="{{ email_settings[0] }}">
@@ -128,6 +128,12 @@
         <br><br>
         <label for="recipient_email">Recipient Email:</label>
         <input type="email" id="recipient_email" name="recipient_email" value="{{ email_settings[4] }}">
+        <br><br>
+        <label for="MAX_TEMP">Temperature max threshold:</label>
+        <input type="number" id="MAX_TEMP" name="MAX_TEMP" value="{{ threshold_settings[1] }}">
+        <br><br>
+        <label for="MAX_HR">HR max threshold:</label>
+        <input type="number" id="MAX_HR" name="MAX_HR" value="{{ threshold_settings[0] }}">
         <br><br>
         <button type="submit">Save Settings</button>
     </form>
