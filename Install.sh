@@ -13,9 +13,7 @@ read db_file
 db_file=${db_file:-data.db}
 echo -e "DB_FILE = '$db_file'" >> Program/env.py
 
-echo -n "Enter database file name (default: data.db): "
-read db_file
-db_file=${db_file:-data.db}
+
 
 echo -n "Enter smtp server address : "
 read smtp
