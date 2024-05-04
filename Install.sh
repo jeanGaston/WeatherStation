@@ -11,7 +11,7 @@ pip3 install bluepy --break-system-packages
 echo -n "Enter database file name (default: data.db): "
 read db_file
 db_file=${db_file:-data.db}
-echo -e "DB_FILE = '$db_file'" >> Program/env.py
+echo -e "DBFILE = '$db_file'" >> Program/env.py
 
 
 
