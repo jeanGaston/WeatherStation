@@ -37,8 +37,8 @@ def create_database(db_name):
                 smtp_server TEXT,
                 smtp_port INTEGER,
                 recipient_email TEXT,
-                MAX_HR INT
-                MAX_TEMP);''')
+                MAX_HR INT,
+                MAX_TEMP INT);''')
     c.execute("INSERT OR IGNORE INTO alert_settings (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email, MAX_HR, MAX_TEMP) VALUES (?, ?, ?, ?, ?, ?, ?)", (SMTP_ID, SMTP_PWD, SMTP, SMTP_PORT, RECIPIENT, MAX_HR, MAX_TEMP))
 
 
@@ -135,10 +135,10 @@ def update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_e
 def update_threshold_settings(max_hr, max_temp):
     conn = sqlite3.connect(DBFILE)
     c = conn.cursor()
-    c.execute("UPDATE alert_settings SET smtp_id = ?, smtp_pwd = ? ", (smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email))
+    c.execute("UPDATE alert_settings SET MAX_HR = ?, MAX_TEMP = ? ", (max_hr, max_temp))
     conn.commit()
-    print(f"[{datetime.now()}] Web -  Mail settings updated :")
-    print_email_settings()
+    print(f"[{datetime.now()}] Web -  threshold settings updated :")
+    print_threshold_settings()
     conn.close()
 
 def print_email_settings():
@@ -163,6 +163,26 @@ def print_email_settings():
 
     # Close the connection
     conn.close()
+
+def print_threshold_settings():
+    # Connect to the database
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
+
+    # Fetch threshold settings
+    c.execute("SELECT MAX_HR, MAX_TEMP FROM alert_settings")
+    settings = c.fetchone()
+
+    # Print settings
+    if settings:
+        print("threshold Settings:")
+        print(f"MAX_HR: {settings[0]}")
+        print(f"MAX_TEMP:{settings[1]}")
+    else:
+        print("No threshold settings found in the database.")
+
+    # Close the connection
+    conn.close
 
 def history_graph_temp():
     # Fetch sensor data

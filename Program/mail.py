@@ -72,17 +72,21 @@ def check_and_send_email():
     # Retrieve the last record from SensorData table
     c.execute("SELECT * FROM SensorData ORDER BY Id DESC LIMIT 1")
     last_record = c.fetchone()
+    # Retrieve the threshold settings from Alert_settings table    
+    c.execute("SELECT MAX_HR, MAX_TEMP FROM alert_settings")
+    threshold = c.fetchone()
+    print(threshold)
 
     if last_record:
         # Extract HR and Temp values from the last record
         _, sensor, time, temp, hr, _ = last_record
 
         # Check if HR or Temp exceed set values
-        if temp > MAX_HR:
+        if temp > threshold[1]:
             email(RECIPIENT, MESSAGE_TEMP, temp, sensor, time)
-        elif hr > MAX_TEMP:
+        if hr > threshold[0]:
             email(RECIPIENT, MESSAGE_HR, hr, sensor, time)
-
+        
     else:
         print(f"[{datetime.now()}] Mail - No data found in the database.")
 

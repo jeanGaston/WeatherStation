@@ -92,9 +92,14 @@ def update_mail():
     smtp_server = request.form['smtp_server']
     smtp_port = request.form['smtp_port']
     recipient_email = request.form['recipient_email']
+    max_hr = request.form['MAX_HR']
+    max_temp = request.form['MAX_TEMP']
     
-    # Update email settings in the database or perform any other actions
+    # Update email settings in the database
     update_email_settings(smtp_id, smtp_pwd, smtp_server, smtp_port, recipient_email)
+    # Update threshold settings in the database
+    update_threshold_settings(max_hr, max_temp)
+
     # Redirect to a success page or render a template
     return redirect("/adm")
 
