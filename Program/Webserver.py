@@ -79,7 +79,10 @@ def admin():
 
     # Fetch email settings
     email_settings = fetch_email_settings()
-    return render_template('admin.html', data=data, sensors=data, email_settings=email_settings)
+
+    #Fetch threshold settings
+    threshold_settings = fetch_threshold_settings()
+    return render_template('admin.html', data=data, sensors=data, email_settings=email_settings, threshold_settings=threshold_settings)
 
 @app.route('/updateMail', methods=['POST'])
 def update_mail():

@@ -32,7 +32,7 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
         - The sensor on wich the values are maxed out
         - the time stamp
     """
-    print(fetch_email_settings())
+    #print(fetch_email_settings())
     sender_email, password, smtp_server, port, recipient_email = fetch_email_settings()
 
     # Create a MIME message
@@ -55,11 +55,11 @@ def email(recipient_email, message, ReachedVal, Sensor, TimeStamp):
 
         # Send the email
         server.sendmail(sender_email, recipient_email, msg.as_string())
-        print(f" [{datetime.now()}] Email sent successfully!")
+        print(f"[{datetime.now()}] Mail Alerte System - Email sent successfully!")
         # Close the connection
         server.quit()
     except Exception as e:
-        print(f"[{datetime.now()}] Failed to send email. Error: {e}")
+        print(f"[{datetime.now()}] Mail Alerte System - Failed to send email. Error: {e}")
     finally:
         None
 
@@ -81,10 +81,10 @@ def check_and_send_email():
         if temp > MAX_HR:
             email(RECIPIENT, MESSAGE_TEMP, temp, sensor, time)
         elif hr > MAX_TEMP:
-            email(RECIPIENT, MESSAGE_HR, temp, sensor, time)
+            email(RECIPIENT, MESSAGE_HR, hr, sensor, time)
 
     else:
-        print("No data found in the database.")
+        print(f"[{datetime.now()}] Mail - No data found in the database.")
 
     # Close database connection
     conn.close()
