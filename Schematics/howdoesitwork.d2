@@ -1,8 +1,6 @@
 hst : "host" {
     PythonSRV : "Stack Python" {
-        DB :"SQLite DB" {
-            icon : https://icons.terrastruct.com/azure%2FDatabases%20Service%20Color%2FAzure%20Database%20for%20MariaDB%20servers.svg
-        }
+
         Scrp : "DataScrapper" {
             icon : https://icons.terrastruct.com/dev%2Fpython.svg
             explaination : |md   
@@ -20,13 +18,16 @@ hst : "host" {
     blt : "Bluetooth hardware" {
         icon : https://icons.terrastruct.com/essentials%2F317-bluetooth.svg
     }
+    DB :"SQLite DB" {
+        icon : https://icons.terrastruct.com/azure%2FDatabases%20Service%20Color%2FAzure%20Database%20for%20MariaDB%20servers.svg
+    }
 }
 sens : "Weather Sensor" {}
 PC : "User browser"{
     icon : https://icons.terrastruct.com/essentials%2F365-user.svg
 
 }
-hst.PythonSRV.DB <-- hst.PythonSRV.Scrp : "Write \ndata" {
+hst.DB <-- hst.PythonSRV.Scrp : "Write \ndata" {
     style : {
         stroke-dash: 5
         animated: true
@@ -34,7 +35,7 @@ hst.PythonSRV.DB <-- hst.PythonSRV.Scrp : "Write \ndata" {
     }
 }
 
-hst.PythonSRV.DB --> hst.PythonSRV.web : "Read \nData" {
+hst.DB --> hst.PythonSRV.web : "Read \nData" {
     style : {
         stroke-dash: 5
         animated: true
@@ -64,7 +65,7 @@ hst.PythonSRV.web <-- pc : "write \nsettings" {
     }
 }
 
-hst.PythonSRV.DB <-- hst.PythonSRV.web : "write \nsettings" {
+hst.DB <-- hst.PythonSRV.web : "write \nsettings" {
     style : {
         stroke-dash: 5
         animated: true
@@ -72,7 +73,7 @@ hst.PythonSRV.DB <-- hst.PythonSRV.web : "write \nsettings" {
     }
 }
 
-hst.PythonSRV.DB --> hst.PythonSRV.Scrp : "Read \nsettings" {
+hst.DB --> hst.PythonSRV.Scrp : "Read \nsettings" {
     style : {
         stroke-dash: 5
         animated: true
