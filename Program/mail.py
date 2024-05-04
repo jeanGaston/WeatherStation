@@ -75,7 +75,7 @@ def check_and_send_email():
     # Retrieve the threshold settings from Alert_settings table    
     c.execute("SELECT MAX_HR, MAX_TEMP FROM alert_settings")
     threshold = c.fetchone()
-    print(threshold)
+
 
     if last_record:
         # Extract HR and Temp values from the last record
