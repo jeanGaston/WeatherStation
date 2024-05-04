@@ -5,7 +5,7 @@ sudo apt update
 sudo apt install -y python3 python3-pip python3-flask python3-schedule python3-plotly python3-pandas
 
 # Install required Python modules
-pip3 install bluepy 
+pip3 install bluepy --break-system-packages
 
 # Create env.py file
 echo -n "Enter database file name (default: data.db): "
