@@ -43,12 +43,12 @@ read hr_max
 hr_max=${hr_max:-70}
 echo -e "MAX_HR= $hr_max" >> Program/env.py
 
-echo -n "Enter temperature alert threshold withpercent °c symbole (default 30) : "
+echo -n "Enter temperature alert threshold without °c symbole (default 30) : "
 read temp_max
 temp_max=${temp_max:-30}
 echo -e "MAX_TEMP= $temp_max" >> Program/env.py
 
-echo -e "SENSORS= {"d6:c6:c7:39:a2:e8":"DEMO3", "d6:1c:bf:b7:76:62":"DEMO1", "d7:ef:13:27:15:29":"DEMO2"} " >> Program/env.py
+echo -e "SENSORS = {'d6:c6:c7:39:a2:e8': 'DEMO3', 'd6:1c:bf:b7:76:62': 'DEMO1', 'd7:ef:13:27:15:29': 'DEMO2'}" >> Program/env.py
 
 
 # Execute main.py
