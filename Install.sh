@@ -83,7 +83,7 @@ exec(){
 }
 
 install_ssh
-install_ssh
+install_ftp
 install_python
 env_py
 exec

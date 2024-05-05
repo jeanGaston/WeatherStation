@@ -61,7 +61,7 @@ def history():
     sensors_name = []
     for mac, name in data:
         disp_data += [fetch_data_by_sensor(name)]
-        sensors_name.append[name]
+        sensors_name.append(name)
 
 
     
