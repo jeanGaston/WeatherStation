@@ -58,17 +58,14 @@ def dashboard():
 def history():
     data = fetch_all_sensor()
     disp_data = []
-  
+    sensors_name = []
     for mac, name in data:
         disp_data += [fetch_data_by_sensor(name)]
+        sensors_name.append[name]
 
-
-    """ S1 = fetch_data_by_sensor("DEMO1")
-    S2 = fetch_data_by_sensor("DEMO2")
-    S3 = fetch_data_by_sensor("DEMO3") """
 
     
-    return render_template('history.html', S1=disp_data[0], S2=disp_data[1], S3=disp_data[2])
+    return render_template('history.html', S1=disp_data[0], S2=disp_data[1], S3=disp_data[2], sensor=sensors_name)
 
 @app.route('/adm', methods=['GET'])
 def admin():

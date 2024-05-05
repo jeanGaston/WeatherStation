@@ -13,13 +13,14 @@ def BltDataScrap():
     #print("Begin device scan")
     devices = scanner.scan(timeout=3.0)
     for device in devices:
-        if device.addr in SENSORS :
+        if device.addr in sensor_dict :
             #print(
             #f"Device found {device.addr} ({device.addrType}), "
             #f"RSSI={device.rssi} dB"
             #)
             for adtype, description, value in device.getScanData():
                 if adtype == 22:
+                    #print(value)
                     temp = int(value[24:28], 16) / 100
                     HR = int(value[28:32], 16) / 100
                     Bat = int(value[20:22], 16)

@@ -60,7 +60,7 @@ tr:hover {
         <a href="/adm" class="btn">Admin</a>
     </div>
     <h1>Database Contents</h1>
-    <h2>Sensor 1</h2>
+    <h2>{{ sensor[0] }}</h2>
     <table border="1">
         <tr>
             <th>Id</th>
@@ -81,7 +81,7 @@ tr:hover {
         </tr>
         {% endfor %}
     </table>
-    <h2>Sensor 2</h2>
+    <h2>{{ sensor[1] }}</h2>
     <table border="1">
         <tr>
             <th>Id</th>
@@ -102,7 +102,7 @@ tr:hover {
         </tr>
         {% endfor %}
     </table>
-    <h2>Sensor 3</h2>
+    <h2>{{ sensor[2] }}</h2>
     <table border="1">
         <tr>
             <th>Id</th>
