@@ -11,15 +11,23 @@ app = Flask(__name__)
 
 # Function to fetch outdoor temperature from Météo-France
 def fetch_outdoor_temperature():
-    # Format the date in the required format (YYYYMMDD)
-    formatted_csv_date = datetime.now().strftime("%Y%m%d%H")
-    print(formatted_csv_date)
+    # Get the current time
+    current_hour = datetime.now().hour
+
+    # Check if the current hour is one of the hours when data is published (every 3 hours from midnight)
+    if current_hour % 3 == 0:
+        # Format the date in the required format (YYYYMMDDHH)
+        formatted_csv_date = datetime.now().strftime("%Y%m%d%H")
+    else:
+        # If the current hour is not one of the publishing hours, fetch the data from the last published hour
+        formatted_csv_date = (datetime.now() - timedelta(hours=current_hour % 3)).strftime("%Y%m%d%H")
+    
     # Construct the URL
     url = f"https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/synop.{formatted_csv_date}.csv"
 
     # Make the HTTP GET request
     response = requests.get(url)
-    print(response)
+    
     # Check if request was successful
     try:
         # Decode the content as UTF-8 and split into lines
@@ -29,17 +37,14 @@ def fetch_outdoor_temperature():
         
         # Extract outdoor temperature from the CSV data
         for row in reader:
-            if row['numer_sta'] == '07149':  #
+            if row['numer_sta'] == '07149':  
                 outdoor_temp = float(row['t'])
-                return round(outdoor_temp - 273.15, 1) #convert °K to °c
-    except:
-        print("Failed to fetch data from Météo-France.")
+                return round(outdoor_temp - 273.15, 1)  # Convert °K to °C
+    except Exception as e:
+        print(f"[{datetime.now()}] MeteoFrance - Failed to fetch data from Météo-France. Error: {e}")
 
 
 
-# Appel de la fonction pour obtenir la température
-#temperature = fetch_outdoor_temperature()
-#print(temperature)
 
 
 
@@ -51,7 +56,9 @@ def dashboard():
     # Convert figure to JSON for rendering in template
     temp_graph_json = history_graph_temp()
     HR_graph_json = history_graph_HR()
-    return render_template('index.html', data=data, temperature=None,  temp_graph_json=temp_graph_json, HR_graph_json=HR_graph_json)
+    outdoor_temp = fetch_outdoor_temperature()
+
+    return render_template('index.html', data=data, temperature=outdoor_temp,  temp_graph_json=temp_graph_json, HR_graph_json=HR_graph_json)
 
 #Route to display the sensor history
 @app.route('/history')
@@ -116,5 +123,5 @@ def run_flask():
 def RunInThread_WebServer():
     threading.Thread(target=run_flask, daemon=True).start()
 if __name__ == '__main__':
-    app.run(debug=True)
+    print(fetch_outdoor_temperature)
 

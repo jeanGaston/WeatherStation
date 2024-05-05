@@ -1,6 +1,11 @@
 #!/bin/bash
 
 
+# Check if running with sudo
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run with sudo."
+    exit 1
+fi
 
 # Install and enable SSH
 install_ssh() {
